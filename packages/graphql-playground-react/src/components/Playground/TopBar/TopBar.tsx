@@ -11,14 +11,14 @@ import {
   getIsReloadingSchema,
   getEndpointUnreachable,
 } from '../../../state/sessions/selectors'
-import { getEmailToken } from "../../../state/sharing/selectors";
+import { getEmailToken } from '../../../state/sharing/selectors'
 import { connect } from 'react-redux'
 import { getFixedEndpoint } from '../../../state/general/selectors'
 import * as PropTypes from 'prop-types'
 import {
   editEmailToken,
   editEndpoint,
-    editToken,
+  editToken,
   prettifyQuery,
   refetchSchema,
 } from '../../../state/sessions/actions'
@@ -34,8 +34,8 @@ export interface Props {
   endpointUnreachable: boolean
 
   editEndpoint: (value: string) => void
-    editEmailToken: (value: string) => void
-    editToken: (value: string) => void
+  editEmailToken: (value: string) => void
+  editToken: (value: string) => void
   prettifyQuery: () => void
   openHistory: () => void
   share: () => void
@@ -52,31 +52,31 @@ class TopBar extends React.Component<Props, {}> {
   }
   fetchToken = async () => {
     const res = await fetch('http://localhost:5000/token', {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({mail: this.props.emailToken})
-    });
-    const token = await res.text();
-    this.props.editToken(token);
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ mail: this.props.emailToken }),
+    })
+    const token = await res.text()
+    this.props.editToken(token)
   }
   render() {
     const { endpointUnreachable } = this.props
     return (
       <TopBarWrapper>
-          <TokenBarWrapper>
-              <TokenBar
-                  value={this.props.emailToken}
-                  onChange={this.onChangeTokenEmail}
-                  onKeyDown={this.onKeyDown}
-                  onBlur={() => {}}
-                  disabled={false}
-                  active={true}
-              />
-              <Button onClick={this.fetchToken}>Get Token !</Button>
-          </TokenBarWrapper>
+        <TokenBarWrapper>
+          <TokenBar
+            value={this.props.emailToken}
+            onChange={this.onChangeTokenEmail}
+            onKeyDown={this.onKeyDown}
+            onBlur={() => {}}
+            disabled={false}
+            active={true}
+          />
+          <Button onClick={this.fetchToken}>Get Token !</Button>
+        </TokenBarWrapper>
         <Button onClick={this.props.prettifyQuery}>Prettify</Button>
         <Button onClick={this.openHistory}>History</Button>
         <UrlBarWrapper>
@@ -116,9 +116,9 @@ class TopBar extends React.Component<Props, {}> {
   onChange = e => {
     this.props.editEndpoint(e.target.value)
   }
-    onChangeTokenEmail = e => {
-        this.props.editEmailToken(e.target.value)
-    }
+  onChangeTokenEmail = e => {
+    this.props.editEmailToken(e.target.value)
+  }
   onKeyDown = e => {
     if (e.keyCode === 13) {
       this.props.refetchSchema()
@@ -170,8 +170,8 @@ class TopBar extends React.Component<Props, {}> {
 
 const mapStateToProps = createStructuredSelector({
   endpoint: getEndpoint,
-    emailToken: getEmailToken,
-    fixedEndpoint: getFixedEndpoint,
+  emailToken: getEmailToken,
+  fixedEndpoint: getFixedEndpoint,
   isReloadingSchema: getIsReloadingSchema,
   endpointUnreachable: getEndpointUnreachable,
 })
@@ -180,8 +180,8 @@ export default connect(
   mapStateToProps,
   {
     editEndpoint,
-      editEmailToken,
-      editToken,
+    editEmailToken,
+    editToken,
     prettifyQuery,
     openHistory,
     share,
@@ -246,8 +246,8 @@ const TokenBar = withProps<UrlBarProps>()(styled.input)`
   border-radius: 4px;
   color: ${p =>
     p.active
-        ? p.theme.editorColours.navigationBarText
-        : p.theme.editorColours.textInactive};
+      ? p.theme.editorColours.navigationBarText
+      : p.theme.editorColours.textInactive};
   border: 1px solid ${p => p.theme.editorColours.background};
   padding: 6px 12px;
   font-size: 13px;
