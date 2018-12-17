@@ -65,7 +65,7 @@
     "lint": "tslint \"src/**/*.ts{,x}\" && lint-staged",
     "start": "yarn build:ts && concurrently \"yarn start:react\" \"wait-on http://localhost:4040/ && yarn start:electron\"",
     "start:react": "webpack-dev-server --hot --profile --history-api-fallback --host 0.0.0.0 --port 4040",
-    "start:electron": "electron lib/main",
+    "start:electron": "electron lib/main --endpoint http://localhost:5000/graphql",
     "stats": "NODE_ENV=production webpack --config webpack.library.js  --profile --json > stats.json",
     "test": "npm run lint",
     "precommit": "lint-staged",

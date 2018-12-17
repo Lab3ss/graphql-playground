@@ -11,11 +11,14 @@ import {
   getIsReloadingSchema,
   getEndpointUnreachable,
 } from '../../../state/sessions/selectors'
+import { getEmailToken } from "../../../state/sharing/selectors";
 import { connect } from 'react-redux'
 import { getFixedEndpoint } from '../../../state/general/selectors'
 import * as PropTypes from 'prop-types'
 import {
+  editEmailToken,
   editEndpoint,
+    editToken,
   prettifyQuery,
   refetchSchema,
 } from '../../../state/sessions/actions'
@@ -24,12 +27,15 @@ import { openHistory } from '../../../state/general/actions'
 
 export interface Props {
   endpoint: string
+  emailToken: string
   shareEnabled?: boolean
   fixedEndpoint?: boolean
   isReloadingSchema: boolean
   endpointUnreachable: boolean
 
   editEndpoint: (value: string) => void
+    editEmailToken: (value: string) => void
+    editToken: (value: string) => void
   prettifyQuery: () => void
   openHistory: () => void
   share: () => void
@@ -44,10 +50,33 @@ class TopBar extends React.Component<Props, {}> {
       getState: PropTypes.func.isRequired,
     }),
   }
+  fetchToken = async () => {
+    const res = await fetch('http://localhost:5000/token', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({mail: this.props.emailToken})
+    });
+    const token = await res.text();
+    this.props.editToken(token);
+  }
   render() {
     const { endpointUnreachable } = this.props
     return (
       <TopBarWrapper>
+          <TokenBarWrapper>
+              <TokenBar
+                  value={this.props.emailToken}
+                  onChange={this.onChangeTokenEmail}
+                  onKeyDown={this.onKeyDown}
+                  onBlur={() => {}}
+                  disabled={false}
+                  active={true}
+              />
+              <Button onClick={this.fetchToken}>Get Token !</Button>
+          </TokenBarWrapper>
         <Button onClick={this.props.prettifyQuery}>Prettify</Button>
         <Button onClick={this.openHistory}>History</Button>
         <UrlBarWrapper>
@@ -87,6 +116,9 @@ class TopBar extends React.Component<Props, {}> {
   onChange = e => {
     this.props.editEndpoint(e.target.value)
   }
+    onChangeTokenEmail = e => {
+        this.props.editEmailToken(e.target.value)
+    }
   onKeyDown = e => {
     if (e.keyCode === 13) {
       this.props.refetchSchema()
@@ -138,7 +170,8 @@ class TopBar extends React.Component<Props, {}> {
 
 const mapStateToProps = createStructuredSelector({
   endpoint: getEndpoint,
-  fixedEndpoint: getFixedEndpoint,
+    emailToken: getEmailToken,
+    fixedEndpoint: getFixedEndpoint,
   isReloadingSchema: getIsReloadingSchema,
   endpointUnreachable: getEndpointUnreachable,
 })
@@ -147,6 +180,8 @@ export default connect(
   mapStateToProps,
   {
     editEndpoint,
+      editEmailToken,
+      editToken,
     prettifyQuery,
     openHistory,
     share,
@@ -200,6 +235,26 @@ const UrlBar = withProps<UrlBarProps>()(styled.input)`
 
 const UrlBarWrapper = styled.div`
   flex: 1;
+  margin-left: 6px;
+  position: relative;
+  display: flex;
+  align-items: center;
+`
+
+const TokenBar = withProps<UrlBarProps>()(styled.input)`
+  background: ${p => p.theme.editorColours.button};
+  border-radius: 4px;
+  color: ${p =>
+    p.active
+        ? p.theme.editorColours.navigationBarText
+        : p.theme.editorColours.textInactive};
+  border: 1px solid ${p => p.theme.editorColours.background};
+  padding: 6px 12px;
+  font-size: 13px;
+  flex: 0.9;
+`
+const TokenBarWrapper = styled.div`
+  flex: 0.5;
   margin-left: 6px;
   position: relative;
   display: flex;

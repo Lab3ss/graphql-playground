@@ -51,7 +51,7 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
   }
 
   componentWillMount() {
-    if (this.props.match.params.id) {
+/*    if (this.props.match.params.id) {
       if (this.props.match.params.id === 'new') {
         return
       }
@@ -104,7 +104,7 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
             loading: false,
           })
         })
-    }
+    }*/
   }
 
   render() {

@@ -5,6 +5,7 @@ import {
   editVariables,
   editHeaders,
   editEndpoint,
+    editEmailToken,
   setEditorFlex,
   openQueryVariables,
   closeQueryVariables,
@@ -47,6 +48,7 @@ export interface Tab {
 export class Session extends Record(getDefaultSession('')) {
   id: string
   endpoint: string
+    mailToken: string
 
   query: string
   file?: string
@@ -190,6 +192,7 @@ const reducer = handleActions(
       editVariables,
       editHeaders,
       editEndpoint,
+      editEmailToken,
       setEditorFlex,
       openQueryVariables,
       closeQueryVariables,
@@ -562,6 +565,19 @@ const reducer = handleActions(
         false,
       )
     },
+      EDIT_TOKEN: (state, { payload }) => {
+          const newSessions = state
+              .get('sessions')
+              .map((session: Session) => {
+                      const data: any = {
+                          headers: '{\n' +
+                              `  "Authorization": "${ payload.token }"\n` +
+                              '}'
+                      }
+                      return session.merge(Map(data))
+              })
+          return state.set('sessions', newSessions)
+      }
   },
   makeSessionState(''),
 )

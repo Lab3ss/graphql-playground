@@ -2,7 +2,10 @@
   "compilerOptions": {
     "outDir": "lib",
     "target": "es5",
-    "lib": ["esnext", "dom"],
+    "lib": [
+      "esnext",
+      "dom"
+    ],
     "sourceMap": true,
     "jsx": "preserve",
     "rootDir": "src",
@@ -15,5 +18,8 @@
     "noUnusedLocals": false,
     "declaration": true
   },
-  "exclude": ["node_modules", "examples"]
+  "exclude": [
+    "node_modules",
+    "examples"
+  ]
 }

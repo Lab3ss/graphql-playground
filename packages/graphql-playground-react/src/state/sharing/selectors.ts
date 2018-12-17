@@ -13,4 +13,5 @@ const makeSharingSelector = key =>
 export const getSharingHistory = makeSharingSelector('history')
 export const getSharingHeaders = makeSharingSelector('headers')
 export const getSharingAllTabs = makeSharingSelector('allTabs')
+export const getEmailToken = makeSharingSelector('emailToken')
 export const getShareUrl = makeSharingSelector('shareUrl')

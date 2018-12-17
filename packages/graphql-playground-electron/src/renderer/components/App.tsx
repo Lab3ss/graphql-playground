@@ -123,6 +123,7 @@ class App extends React.Component<ReduxProps, State> {
 
   getArgs(): any {
     const argv = remote.process.argv
+      console.log('ARGV', argv)
     const args = minimist(argv.slice(1))
 
     return {
